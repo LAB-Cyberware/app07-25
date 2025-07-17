@@ -1,38 +1,55 @@
-import NextAuth from 'next-auth' /* Importación del Instalado Next-Auth */
-import GoogleProvider from 'next-auth/providers/google' /* Importación del Proveedor de Google para 
-permitir login con cuentas de Google usando el Next Auth */
+import NextAuth from 'next-auth'
+import GoogleProvider from 'next-auth/providers/google'
+import { connectDB } from '../../../utils/mongoose'
+import User from '../../../models/User'
 
-const handler = NextAuth({ /* Llamada del importado Next Auth para configuración y que esta misma
-configuración se guarde en handler */
-  providers: [ /* Lista de Proveedores */
-    GoogleProvider({ /* Proveedor de Google */
-      clientId: process.env.GOOGLE_CLIENT_ID, /* clientId es el id del cliente, el cual fue obtenido
-      desde Google Cloud Console, y que está usando el objeto process de Node.js. Node.js ya leyó el
-      .env.local y creó process.env al iniciar la aplicación, pero desde el presente código se obtiene 
-      el valor de GOOGLE_CLIENT_ID del process.env para que Next Auth pueda usarlo. Puede exponerse sin 
-      problemas.*/
-      /* Hay que destacar que, clientId sirve para identificar la aplicación ante Google y que así pueda
-      por ejemplo decir "esta solicitud viene de app07-25" */
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET, /* clientSecret es el id Secreto, el cual fue 
-      obtenido desde Google Cloud Console al igual que el clientId. Nuevamente, el proceso es el mismo
-      que con clientId, pero para el caso del GOOGLE_CLIENT_SECRET. No puede exponerse, podría generar
-      diversos problemas como podría ser un ataque cibernetico o suplantación de identidad. */
-      /* A destacar para su caso está el hecho de que, el clientSecret, se trata de una especie de
-      "contraseña" que busca decirle a Google, por ejemplo, que "soy el dueño de app07-25", es la forma
-      de autenticar la aplicación ante Google. */
+const handler = NextAuth({ /* La función contenedora del NextAuth con los proveedores, en este caso
+  Google (GoogleProvider). */
+  providers: [ /* Proveedores */
+    GoogleProvider({ /* El proveedor de Google. */
+      clientId: process.env.GOOGLE_CLIENT_ID, /* El client id recibido desde GOOGLE_CLIENT_ID. */
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET, /* El secreto de cliente, o como yo lo llamo, la
+      contraseña, obtenida a través de GOOGLE_CLIENT_SECRET en .env.local. */
     })
   ],
-  callbacks: { /* Los callbacks se tratan de funciones personalizadas de NextAuth que se ejecutan en
-    momentos específicos. */
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id
+  callbacks: { /* Callbacks para momentos especificos. */
+    async jwt({ token, user }) { /* Una función asíncrona con los parámetros de Token y User. */
+      if (user) { /* Si detecta la existencia de un usuario. */
+        token.id = user.id /* El token.id es igual al user.id. */
       }
-      return token
+      return token /* Retorna el Token. */
     },
-    async session({ session, token }) {
-      session.user.id = token.id
-      return session
+    async session({ session, token }) { /* Una función asíncrona con los parámetros de Session y Token. */
+      try { /* Intenta */
+        await connectDB() /* Conectando a la Base de Datos... */
+        
+        /* Buscar o crear usuario en la base de datos. */
+        let dbUser = await User.findOne({ email: session.user.email })
+        
+        if (!dbUser) { /* Si no existe, crear nuevo usuario con rol por defecto (user). */
+          dbUser = new User({ /* Si el usuario es nuevo en la Base de Datos. */
+            email: session.user.email, /* Ingresa el email a la Base de Datos. */
+            name: session.user.name, /* Ingresa el nombre de usuario a la Base de Datos. */
+            rol: "user" /* Ingresa el rol por defecto, osea, el rol de "user". */
+          })
+          await dbUser.save() /* Va guardando el usuario en la Base de Datos. */
+        } else {
+          if (!dbUser.rol) { /* Si existe pero no tiene rol, asignar rol por defecto (user). */
+            dbUser.rol = "user"
+            await dbUser.save()
+          }
+        }
+        
+        /* Agregar información del usuario a la sesión. */
+        session.user.id = dbUser._id.toString() /* Convertir el id que es ObjectId a toString para
+        evitar cualquier problema con NextAuth y agregarlo a la sesión de esa forma. */
+        session.user.rol = dbUser.rol /* Agregar el rol a la sesión. */
+        
+        return session /* Retorna la sesión. */ 
+      } catch (error) { /* Por si ocurriese un error. */
+        console.error('Error en callback de sesión:', error) /* Mensaje de error para la consola. */
+        return session /* Retorna la sesión. */
+      }
     }
   }
 })
