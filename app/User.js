@@ -1,4 +1,4 @@
-import { Schema, model, models } from "@/utils/mongoose.js";
+import { Schema, model, models } from "mongoose";
 
 const userSchema = new Schema({
     email: {
