@@ -9,23 +9,26 @@ export default function AdminPage() {
   const router = useRouter()
 
   useEffect(() => {
-    if (status === 'loading') return /*  */
+    if (status === 'loading') return /* Carga primero para evitar problemas posteriores. */
 
     if (!session) {
-      router.push('/') // Redirigir al login si no hay sesión
+      router.push('/') /* Si no está iniciada la sesión redirige al login. */
       return
     }
 
     if (session.user.rol !== 'admin') {
-      router.push('/') // Redirigir si no es admin
+      router.push('/') /* Si el usuario no tiene rol de admin, lo mandará al page.js principal. */
       return
     }
-  }, [session, status, router])
+  }, [session, status, router]) /* Arreglo que indica que el useEffect solo se ejecute cuando cambian las
+  dependencias (session, status, router). */
 
-  if (status === 'loading') return <p>Cargando...</p>
+  if (status === 'loading') return <p>Cargando...</p> 
 
-  if (!session || session.user.rol !== 'admin') {
-    return <p>Acceso denegado...</p>
+  if (!session || session.user.rol !== 'admin') { /* Si no se está iniciada la sesión ni se tiene el
+    rol de admin. */
+    return <p>Acceso denegado.</p> /* Manda el mensaje de acceso denegado. Es solo una "doble
+    protección". */
   }
 
   return (
