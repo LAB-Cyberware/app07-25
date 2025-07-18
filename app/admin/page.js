@@ -42,7 +42,8 @@ export default function AdminPage() {
       </div>
         
         <div>
-            <button className='mt-6 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded'>
+            <button className='mt-6 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded 
+            text-sm'>
             Listado de Usuarios
             </button>
         </div>
