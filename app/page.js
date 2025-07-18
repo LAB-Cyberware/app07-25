@@ -8,6 +8,7 @@ export default function Login() {
   if (status === 'loading') return <p>Cargando...</p>
 
   if (session) {
+    if (user.rol === "user") {
     return (
       <div className="p-6 max-w-md mx-auto bg-white rounded-lg shadow-md">
         <h1 className="text-2xl font-bold mb-4">Bienvenido</h1>
@@ -44,4 +45,5 @@ export default function Login() {
       </button>
     </div>
   )
+}
 }
