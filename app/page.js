@@ -1,14 +1,31 @@
 'use client'
 
 import { useSession, signIn, signOut } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 export default function Login() {
   const { data: session, status } = useSession()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (session && session.user.rol === 'admin') {
+      router.push('/admin') // Cambia por tu ruta de admin
+    }
+  }, [session, router])
 
   if (status === 'loading') return <p>Cargando...</p>
 
+  
   if (session) {
-    if (user.rol === "user") {
+    // Si es admin, mostrar mensaje de redirección
+    if (session.user.rol === 'admin') {
+      return (
+        <div className="p-6 max-w-md mx-auto bg-white rounded-lg shadow-md">
+          <h1 className="text-2xl font-bold mb-4">Redirigiendo...</h1>
+          <p>Redirigiendo al panel de administrador...</p>
+        </div>
+      )
+    }
     return (
       <div className="p-6 max-w-md mx-auto bg-white rounded-lg shadow-md">
         <h1 className="text-2xl font-bold mb-4">Bienvenido</h1>
@@ -45,5 +62,4 @@ export default function Login() {
       </button>
     </div>
   )
-}
 }
