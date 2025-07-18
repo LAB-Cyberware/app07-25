@@ -9,22 +9,39 @@ export default function Login() {
 
   if (session) {
     return (
-      <div>
-        <p>Hola, {session.user.name}</p>
-        <p>Email: {session.user.email}</p>
-        <button onClick={() => signOut()}>Cerrar sesión</button>
+      <div className="p-6 max-w-md mx-auto bg-white rounded-lg shadow-md">
+        <h1 className="text-2xl font-bold mb-4">Bienvenido</h1>
+        <div className="space-y-2">
+          <p><strong>Nombre:</strong> {session.user.name}</p>
+          <p><strong>Email:</strong> {session.user.email}</p>
+          <p><strong>Rol:</strong> 
+            <span className={`ml-2 px-2 py-1 rounded text-sm ${
+              session.user.rol === 'admin' ? 'bg-red-100 text-red-800' :
+              session.user.rol === 'mod' ? 'bg-yellow-100 text-yellow-800' :
+              'bg-green-100 text-green-800'
+            }`}> {session.user.rol}
+            </span>
+          </p>
+        </div>
+        <button 
+          onClick={() => signOut()}
+          className="mt-4 w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+        >
+          Cerrar sesión
+        </button>
       </div>
     )
   }
 
   return (
-    <div>
-      <h1>Iniciar sesión</h1>
-      <button onClick={() => signIn('google')}>
+    <div className="p-6 max-w-md mx-auto bg-white rounded-lg shadow-md">
+      <h1 className="text-2xl font-bold mb-4">Iniciar sesión</h1>
+      <button 
+        onClick={() => signIn('google')}
+        className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+      >
         Iniciar sesión con Google
       </button>
     </div>
   )
 }
-
-const uri = "mongodb+srv://labcyberware:<db_password>@labcyberware.yd96pdc.mongodb.net/?retryWrites=true&w=majority&appName=labcyberware";
