@@ -2,15 +2,15 @@
 
 import { useSession, signIn, signOut } from 'next-auth/react'
 
-export default function Login() {
+export default function AdminLogin() {
   const { data: session, status } = useSession()
 
   if (status === 'loading') return <p>Cargando...</p>
 
-  if (session.user.rol === 'user') {
+  if (session.user.rol === 'admin') {
     return (
       <div className="p-6 max-w-md mx-auto bg-white rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold mb-4">Bienvenido</h1>
+        <h1 className="text-2xl font-bold mb-4">Bienvenido Administrador</h1>
         <div className="space-y-2">
           <p><strong>Nombre:</strong> {session.user.name}</p>
           <p><strong>Email:</strong> {session.user.email}</p>
