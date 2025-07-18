@@ -40,13 +40,11 @@ export default function AdminPage() {
         <p className='text-sm text-red-600 mt-2'>Email: {session.user.email}</p>
         <p className="text-sm text-red-600 mt-2">Rol actual: {session.user.rol}</p>
       </div>
-        
-        <div>
-            <button className='mt-6 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded'>
-            Listado de Usuarios
-            </button>
-        </div>
-        <br/>
+        <button
+        className="mt-6 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+      >
+        Listado de Usuarios
+      </button>
       <button 
         onClick={() => signOut()}
         className="mt-6 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
