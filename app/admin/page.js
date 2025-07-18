@@ -42,7 +42,7 @@ export default function AdminPage() {
       </div>
         
         <div>
-            <button className='mb-4'>
+            <button className='mt-6'>
             Listado de Usuarios
             </button>
         </div>
