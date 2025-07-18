@@ -8,10 +8,13 @@ const handler = NextAuth({
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      authorization: {
-        params: {
-          scope: "openid email profile",
-          prompt: "select_account",
+      authorization: { /* Configuración de elementos a autorizar al momento del login de Google. */ 
+        params: { /* Parámetros a autorizar durante el login de Google. */
+          scope: "openid email profile", /* scope indica qué permisos se piden al usuario, en este caso,
+          se están pidiendo los permisos de id, email y perfil. Es como decir "Estás seguro de dar los
+          permisos de acceso a estos datos?". */
+          prompt: "select_account", /* promp indica lo que mostrará la pantalla, en este caso, la
+          selección de cuenta cada vez que se inicie sesión. */
         },
       },
     })
@@ -27,11 +30,9 @@ const handler = NextAuth({
       try {
         await connectDB()
         
-        // Buscar o crear usuario en la base de datos
         let dbUser = await User.findOne({ email: session.user.email })
         
         if (!dbUser) {
-          // Si no existe, crear nuevo usuario con rol por defecto
           dbUser = new User({
             email: session.user.email,
             name: session.user.name,
@@ -39,14 +40,12 @@ const handler = NextAuth({
           })
           await dbUser.save()
         } else {
-          // Si existe pero no tiene rol, asignar rol por defecto
           if (!dbUser.rol) {
             dbUser.rol = "user"
             await dbUser.save()
           }
         }
-        
-        // Agregar información del usuario a la sesión
+
         session.user.id = dbUser._id.toString()
         session.user.rol = dbUser.rol
         
