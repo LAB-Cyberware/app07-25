@@ -3,6 +3,7 @@
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
+import Link from 'next/link';
 
 export default function AdminPage() {
   const { data: session, status } = useSession()
@@ -40,11 +41,11 @@ export default function AdminPage() {
         <p className='text-sm text-red-600 mt-2'>Email: {session.user.email}</p>
         <p className="text-sm text-red-600 mt-2">Rol actual: {session.user.rol}</p>
       </div>
-        <button
-        className="mt-6 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
-      >
-        Listado de Usuarios
-      </button>
+        <Link href="/admin/user_rol">
+          <button className="mt-6 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+          Listado de Usuarios
+          </button>
+        </Link>
       <button 
         onClick={() => signOut()}
         className="mt-6 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"

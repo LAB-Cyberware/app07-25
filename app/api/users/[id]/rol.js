@@ -1,9 +1,19 @@
+import { connectDB } from "../../../mongoose";
+
 export default async function handler(req, res) {
-  const { id } = req.query
-  const { nuevoRol } = req.body
-  
-  // Actualizar rol en base de datos
-  await actualizarRolUsuario(id, nuevoRol)
-  
-  res.json({ success: true })
+  try {
+    const client = await connectDB();
+    const db = client.db("test");
+    const users = await db
+      .collection("users")
+      .find({})
+      .sort({ _id: -1 })
+      .limit(100)
+      .toArray();
+
+    res.json(users);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Error al obtener usuarios' });
+  }
 }
