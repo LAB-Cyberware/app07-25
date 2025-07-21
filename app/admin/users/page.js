@@ -93,7 +93,7 @@ export default function UsersList() {
               <div className="space-y-3">
                 {user.email && (
                   <div className="flex items-center text-gray-600">
-                    <span className="text-sm">{user.email}</span>
+                    <span className="text-sm"> Email: {user.email}</span>
                   </div>
                 )}
 
@@ -106,7 +106,13 @@ export default function UsersList() {
                         ? 'bg-yellow-100 text-yellow-800'
                         : 'bg-green-100 text-green-800'
                     }`}>
-                      {user.rol}
+                     Rol: {user.rol}
+                     <button>
+                        Cambiar a User {user.rol = "user"}
+                     </button>
+                     <button>
+                        Cambiar a Admin {user.rol = "admin"}
+                     </button>
                     </span>
                   </div>
                 )}
