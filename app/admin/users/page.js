@@ -14,8 +14,8 @@ export default function UsersList() {
     fetchUsers(); /* Llamado a la función fetchUsers. */
   }, []);
 
-  const cambiarRolUser = (nuevoRol) => {
-    data.rol = nuevoRol || "user";
+  const cambiarRolUser = () => {
+    data.rol = "user"
     return data.rol;
   };
 
