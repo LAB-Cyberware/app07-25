@@ -14,20 +14,55 @@ export default function UsersList() {
     fetchUsers(); /* Llamado a la función fetchUsers. */
   }, []);
 
- const cambiarRolUser = (userId) => {
+const cambiarRolUser = async (userId) => {
+  try {
+    const response = await fetch(`/api/users/${userId}`, {
+      method: 'PATCH', 
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ rol: "user" })
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al actualizar rol');
+    }
     setUsers(users.map(user => 
-        user._id === userId 
-            ? { ...user, rol: "user" }
-            : user
+      user._id === userId 
+        ? { ...user, rol: "user" }
+        : user
     ));
+
+  } catch (error) {
+    console.error('Error:', error);
+    setError('Error al cambiar rol');
+  }
 };
 
-const cambiarRolAdmin = (userId) => {
+const cambiarRolAdmin = async (userId) => {
+  try {
+    const response = await fetch(`/api/users/${userId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ rol: "admin" })
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al actualizar rol');
+    }
+
     setUsers(users.map(user => 
-        user._id === userId 
-            ? { ...user, rol: "admin" }
-            : user
+      user._id === userId 
+        ? { ...user, rol: "admin" }
+        : user
     ));
+
+  } catch (error) {
+    console.error('Error:', error);
+    setError('Error al cambiar rol');
+  }
 };
 
   const fetchUsers = async () => {
@@ -130,6 +165,12 @@ const cambiarRolAdmin = (userId) => {
                 {user.rol && (
                   <button onClick={() => cambiarRolUser(user._id)}>
                     Cambiar Rol a User
+                  </button>
+                )}
+
+                {user.rol && (
+                  <button onClick={() => cambiarRolAdmin(user._id)}>
+                    Cambiar Rol a Admin
                   </button>
                 )}
               </div>
