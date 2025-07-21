@@ -1,8 +1,8 @@
-import { connectDB } from "../../../mongoose";
+import User from "../../../User";
 
 export default async function handler(req, res) {
   try {
-    const client = await connectDB();
+    const client = await User.find();
     const db = client.db("test");
     const users = await db
       .collection("users")
