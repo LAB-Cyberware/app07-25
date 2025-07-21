@@ -14,9 +14,16 @@ export default function UsersList() {
     fetchUsers(); /* Llamado a la función fetchUsers. */
   }, []);
 
-  const rolUser = new changeRolUser ({
-    rol: data.rol || "user"
-  });
+  const cambiarRolUser = (nuevoRol) => {
+    data.rol = nuevoRol || "user";
+    return data.rol;
+  };
+
+  const cambiarRolAdmin = (nuevoRol) => {
+    data.rol = nuevoRol || "admin";
+    return data.rol;
+  }
+
 
   const fetchUsers = async () => {
     try {
@@ -116,7 +123,7 @@ export default function UsersList() {
                 )}
                 
                 {user.rol && (
-                  <button onClick={rolUser}>
+                  <button onClick={cambiarRolUser}>
                     Cambiar Rol a User
                   </button>
                 )}
