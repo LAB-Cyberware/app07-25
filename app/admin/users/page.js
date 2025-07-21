@@ -14,16 +14,21 @@ export default function UsersList() {
     fetchUsers(); /* Llamado a la función fetchUsers. */
   }, []);
 
-  const cambiarRolUser = () => {
-    data.rol = "user"
-    return data.rol;
-  };
+ const cambiarRolUser = (userId) => {
+    setUsers(users.map(user => 
+        user._id === userId 
+            ? { ...user, rol: "user" }
+            : user
+    ));
+};
 
-  const cambiarRolAdmin = (nuevoRol) => {
-    data.rol = nuevoRol || "admin";
-    return data.rol;
-  }
-
+const cambiarRolAdmin = (userId) => {
+    setUsers(users.map(user => 
+        user._id === userId 
+            ? { ...user, rol: "admin" }
+            : user
+    ));
+};
 
   const fetchUsers = async () => {
     try {
@@ -123,7 +128,7 @@ export default function UsersList() {
                 )}
                 
                 {user.rol && (
-                  <button onClick={cambiarRolUser}>
+                  <button onClick={() => cambiarRolUser(user._id)}>
                     Cambiar Rol a User
                   </button>
                 )}
