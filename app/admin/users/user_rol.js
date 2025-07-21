@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useEffect } from 'react';
 
 export default function UsersList() {
@@ -34,7 +36,6 @@ export default function UsersList() {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
         <div className="flex flex-col items-center space-y-4">
-          <Loader className="w-8 h-8 animate-spin text-blue-600" />
           <p className="text-gray-600">Cargando usuarios...</p>
         </div>
       </div>
@@ -63,7 +64,6 @@ export default function UsersList() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 flex items-center">
-            <User className="mr-3 text-blue-600" />
             Lista de Usuarios
           </h1>
           <p className="text-gray-600 mt-2">
@@ -79,7 +79,6 @@ export default function UsersList() {
             >
               <div className="flex items-center mb-4">
                 <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                  <User className="w-6 h-6 text-blue-600" />
                 </div>
                 <div className="ml-4">
                   <h3 className="text-lg font-semibold text-gray-900">
@@ -118,7 +117,6 @@ export default function UsersList() {
 
         {users.length === 0 && (
           <div className="text-center py-12">
-            <User className="mx-auto w-16 h-16 text-gray-300 mb-4" />
             <h3 className="text-lg font-semibold text-gray-600 mb-2">
               No se encontraron usuarios
             </h3>
