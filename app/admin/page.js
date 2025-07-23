@@ -4,6 +4,7 @@ import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import Link from 'next/link';
+import "./css/page.css"
 
 export default function AdminPage() {
   const { data: session, status } = useSession()
