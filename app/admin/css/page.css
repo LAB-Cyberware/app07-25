@@ -1,0 +1,316 @@
+:root {
+  --admin-primary: #1f2937;
+  --admin-secondary: #374151;
+  --admin-accent: #3b82f6;
+  --admin-danger: #dc2626;
+  --admin-success: #059669;
+  --admin-warning: #d97706;
+  
+  --admin-bg: #f8fafc;
+  --admin-surface: #ffffff;
+  --admin-border: #e5e7eb;
+  --admin-text: #111827;
+  --admin-text-muted: #6b7280;
+  
+  --admin-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --admin-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  
+  --admin-radius: 12px;
+  --admin-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: var(--admin-bg);
+  color: var(--admin-text);
+  line-height: 1.6;
+}
+
+/* Container principal de la página admin */
+.admin-container {
+  padding: 2rem;
+  max-width: 56rem; /* equivale a max-w-4xl */
+  margin: 2rem auto;
+  background: linear-gradient(135deg, var(--admin-surface) 0%, #f9fafb 100%);
+  border-radius: var(--admin-radius);
+  box-shadow: var(--admin-shadow-lg);
+  border: 1px solid var(--admin-border);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Efecto de brillo sutil en el fondo */
+.admin-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--admin-accent), transparent);
+  opacity: 0.6;
+}
+
+/* Título principal */
+.admin-title {
+  font-size: 2.25rem; /* text-3xl */
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--admin-primary);
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.admin-title::before {
+  content: '👑';
+  font-size: 2rem;
+  opacity: 0.8;
+}
+
+/* Mensaje de bienvenida */
+.admin-welcome {
+  font-size: 1.125rem;
+  margin-bottom: 1.5rem;
+  color: var(--admin-text-muted);
+  font-weight: 500;
+}
+
+.admin-welcome .username {
+  color: var(--admin-accent);
+  font-weight: 600;
+}
+
+/* Card de información del usuario */
+.admin-info-card {
+  background: linear-gradient(135deg, #fef2f2 0%, #fdf2f8 100%);
+  padding: 1.5rem;
+  border-radius: calc(var(--admin-radius) - 2px);
+  margin-bottom: 2rem;
+  border: 1px solid #fecaca;
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-info-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--admin-danger), #f87171);
+}
+
+.admin-info-text {
+  font-size: 0.875rem;
+  color: #991b1b;
+  margin-top: 0.5rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.admin-info-text::before {
+  content: '•';
+  color: var(--admin-danger);
+  font-weight: bold;
+}
+
+/* Contenedor de botones */
+.admin-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+/* Estilos base para botones */
+.admin-btn {
+  padding: 0.875rem 1.75rem;
+  font-weight: 600;
+  border-radius: calc(var(--admin-radius) - 4px);
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: var(--admin-transition);
+  font-size: 0.95rem;
+  position: relative;
+  overflow: hidden;
+  min-width: 160px;
+  justify-content: center;
+}
+
+.admin-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: left 0.5s;
+}
+
+.admin-btn:hover::before {
+  left: 100%;
+}
+
+/* Botón primario (Listado de Usuarios) */
+.admin-btn-primary {
+  background: linear-gradient(135deg, var(--admin-accent) 0%, #2563eb 100%);
+  color: white;
+  box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
+}
+
+.admin-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px 0 rgba(59, 130, 246, 0.5);
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+}
+
+.admin-btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Botón de peligro (Cerrar sesión) */
+.admin-btn-danger {
+  background: linear-gradient(135deg, var(--admin-danger) 0%, #b91c1c 100%);
+  color: white;
+  box-shadow: 0 4px 14px 0 rgba(220, 38, 38, 0.39);
+}
+
+.admin-btn-danger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px 0 rgba(220, 38, 38, 0.5);
+  background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+}
+
+.admin-btn-danger:active {
+  transform: translateY(0);
+}
+
+/* Estados de carga */
+.loading-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  font-size: 1.125rem;
+  color: var(--admin-text-muted);
+  gap: 0.75rem;
+}
+
+.loading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--admin-border);
+  border-top: 3px solid var(--admin-accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Mensaje de acceso denegado */
+.access-denied {
+  text-align: center;
+  padding: 3rem;
+  color: var(--admin-danger);
+  font-size: 1.25rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #fef2f2 0%, #fff1f2 100%);
+  border-radius: var(--admin-radius);
+  border: 2px solid #fecaca;
+}
+
+/* Iconos para botones */
+.admin-btn-primary::after {
+  content: '👥';
+  margin-left: 0.25rem;
+}
+
+.admin-btn-danger::after {
+  content: '🚪';
+  margin-left: 0.25rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .admin-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .admin-title {
+    font-size: 1.875rem;
+    text-align: center;
+  }
+  
+  .admin-buttons {
+    flex-direction: column;
+  }
+  
+  .admin-btn {
+    width: 100%;
+    min-width: unset;
+  }
+  
+  .admin-info-card {
+    padding: 1rem;
+  }
+}
+
+/* Animaciones de entrada */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.admin-container {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Efectos hover adicionales */
+.admin-info-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px -5px rgba(220, 38, 38, 0.25);
+  transition: var(--admin-transition);
+}
+
+/* Dark mode support (opcional) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --admin-bg: #0f172a;
+    --admin-surface: #1e293b;
+    --admin-border: #334155;
+    --admin-text: #f1f5f9;
+    --admin-text-muted: #94a3b8;
+  }
+  
+  .admin-info-card {
+    background: linear-gradient(135deg, #1e1b1b 0%, #1a1625 100%);
+    border-color: #7f1d1d;
+  }
+}

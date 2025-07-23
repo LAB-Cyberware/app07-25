@@ -10,48 +10,53 @@ export default function AdminPage() {
   const router = useRouter()
 
   useEffect(() => {
-    if (status === 'loading') return /* Carga primero para evitar problemas posteriores. */
-
+    if (status === 'loading') return
     if (!session) {
-      router.push('/') /* Si no está iniciada la sesión redirige al login. */
+      router.push('/')
       return
     }
-
     if (session.user.rol !== 'admin') {
-      router.push('/') /* Si el usuario no tiene rol de admin, lo mandará al page.js principal. */
+      router.push('/')
       return
     }
-  }, [session, status, router]) /* Arreglo que indica que el useEffect solo se ejecute cuando cambian las
-  dependencias (session, status, router). */
+  }, [session, status, router])
 
-  if (status === 'loading') return <p>Cargando...</p> 
+  if (status === 'loading') {
+    return (
+      <div className="loading-text">
+        <div className="loading-spinner"></div>
+        Cargando...
+      </div>
+    )
+  }
 
-  if (!session || session.user.rol !== 'admin') { /* Si no se está iniciada la sesión ni se tiene el
-    rol de admin. */
-    return <p>Acceso denegado.</p> /* Manda el mensaje de acceso denegado. Es solo una "doble
-    protección". */
+  if (!session || session.user.rol !== 'admin') {
+    return <div className="access-denied">🚫 Acceso denegado.</div>
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto bg-white rounded-lg shadow-md">
-      <h1 className="text-3xl font-bold mb-4">Página VIP de Administrador</h1>
-      <p className="mb-4">¡Bienvenido, {session.user.name}!</p>
+    <div className="admin-container">
+      <h1 className="admin-title">Página VIP de Administrador</h1>
+      <p className="admin-welcome">
+        ¡Bienvenido, <span className="username">{session.user.name}</span>!
+      </p>
       
-      <div className="bg-red-50 p-4 rounded mb-4">
-        <p className='text-sm text-red-600 mt-2'>Email: {session.user.email}</p>
-        <p className="text-sm text-red-600 mt-2">Rol actual: {session.user.rol}</p>
+      <div className="admin-info-card">
+        <p className="admin-info-text">📧 Email: {session.user.email}</p>
+        <p className="admin-info-text">🎯 Rol actual: {session.user.rol}</p>
       </div>
-        <Link href="/admin/users">
-          <button className="mt-6 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+
+      <div className="admin-buttons">
+        <Link href="/admin/users" className="admin-btn admin-btn-primary">
           Listado de Usuarios
-          </button>
         </Link>
         <button 
           onClick={() => signOut()}
-          className="mt-6 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+          className="admin-btn admin-btn-danger"
         >
           Cerrar sesión
         </button>
+      </div>
     </div>
   )
 }
