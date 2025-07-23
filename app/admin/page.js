@@ -3,8 +3,7 @@
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
-import Link from 'next/link';
-import "./css/page.css"
+import Link from 'next/link'
 
 export default function AdminPage() {
   const { data: session, status } = useSession()
@@ -24,40 +23,129 @@ export default function AdminPage() {
 
   if (status === 'loading') {
     return (
-      <div className="loading-text">
-        <div className="loading-spinner"></div>
-        Cargando...
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
+        <div className="flex items-center gap-3 bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-8">
+          <div className="animate-spin rounded-full h-6 w-6 border-3 border-slate-300 border-t-blue-500"></div>
+          <span className="text-slate-600 font-medium text-lg">Cargando...</span>
+        </div>
       </div>
     )
   }
 
   if (!session || session.user.rol !== 'admin') {
-    return <div className="access-denied">🚫 Acceso denegado.</div>
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center p-4">
+        <div className="bg-gradient-to-r from-red-50 to-pink-50 border-2 border-red-200 rounded-2xl p-8 text-center shadow-xl">
+          <div className="text-6xl mb-4">🚫</div>
+          <div className="text-red-600 text-xl font-semibold">Acceso denegado.</div>
+        </div>
+      </div>
+    )
   }
 
   return (
-    <div className="admin-container">
-      <h1 className="admin-title">Página VIP de Administrador</h1>
-      <p className="admin-welcome">
-        ¡Bienvenido, <span className="username">{session.user.name}</span>!
-      </p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-4">
+      <div className="max-w-4xl mx-auto mt-8">
+        {/* Contenedor principal con efecto glassmorphism */}
+        <div className="relative bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 p-8 overflow-hidden animate-fade-in-up">
+          
+          {/* Línea superior decorativa */}
+          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-60"></div>
+          
+          {/* Título con corona */}
+          <div className="flex items-center gap-3 mb-6">
+            <span className="text-4xl opacity-80">👑</span>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+              Página VIP de Administrador
+            </h1>
+          </div>
+          
+          {/* Mensaje de bienvenida */}
+          <p className="text-lg text-slate-600 font-medium mb-6">
+            ¡Bienvenido, <span className="text-blue-600 font-semibold">{session.user.name}</span>!
+          </p>
+          
+          {/* Tarjeta de información con gradiente */}
+          <div className="relative bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-2xl p-6 mb-8 overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+            
+            {/* Barra lateral izquierda */}
+            <div className="absolute left-0 top-0 w-1 h-full bg-gradient-to-b from-red-500 to-red-400"></div>
+            
+            <div className="space-y-3">
+              <div className="flex items-center gap-2 text-red-800 font-medium">
+                <span className="w-2 h-2 bg-red-500 rounded-full"></span>
+                <span className="text-xl">📧</span>
+                <span>Email: {session.user.email}</span>
+              </div>
+              <div className="flex items-center gap-2 text-red-800 font-medium">
+                <span className="w-2 h-2 bg-red-500 rounded-full"></span>
+                <span className="text-xl">🎯</span>
+                <span>Rol actual: {session.user.rol}</span>
+              </div>
+            </div>
+          </div>
+          
+          {/* Botones de acción */}
+          <div className="flex flex-col sm:flex-row gap-4">
+            
+            {/* Botón de usuarios */}
+            <Link 
+              href="/admin/users" 
+              className="group relative flex-1 min-w-40 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 
+                         text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 
+                         transform hover:-translate-y-1 hover:shadow-xl active:translate-y-0
+                         focus:outline-none focus:ring-4 focus:ring-blue-300/50
+                         overflow-hidden"
+            >
+              {/* Efecto shine */}
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent 
+                             transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></span>
+              
+              <span className="relative flex items-center justify-center gap-2">
+                <span className="text-xl">👥</span>
+                <span>Listado de Usuarios</span>
+              </span>
+            </Link>
+            
+            {/* Botón de cerrar sesión */}
+            <button 
+              onClick={() => signOut()}
+              className="group relative flex-1 min-w-40 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 
+                         text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 
+                         transform hover:-translate-y-1 hover:shadow-xl active:translate-y-0
+                         focus:outline-none focus:ring-4 focus:ring-red-300/50
+                         overflow-hidden"
+            >
+              {/* Efecto shine */}
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent 
+                             transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></span>
+              
+              <span className="relative flex items-center justify-center gap-2">
+                <span className="text-xl">🚪</span>
+                <span>Cerrar sesión</span>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
       
-      <div className="admin-info-card">
-        <p className="admin-info-text">📧 Email: {session.user.email}</p>
-        <p className="admin-info-text">🎯 Rol actual: {session.user.rol}</p>
-      </div>
-
-      <div className="admin-buttons">
-        <Link href="/admin/users" className="admin-btn admin-btn-primary">
-          Listado de Usuarios
-        </Link>
-        <button 
-          onClick={() => signOut()}
-          className="admin-btn admin-btn-danger"
-        >
-          Cerrar sesión
-        </button>
-      </div>
+      {/* Styles para animaciones personalizadas */}
+      <style jsx>{`
+        @keyframes fade-in-up {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        .animate-fade-in-up {
+          animation: fade-in-up 0.6s ease-out;
+        }
+      `}</style>
     </div>
   )
 }

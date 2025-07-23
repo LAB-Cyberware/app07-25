@@ -3,71 +3,76 @@
 import { useState, useEffect } from 'react';
 
 export default function UsersList() {
-  const [users, setUsers] = useState([]); /* Los corchetes representan el estado inicial del "users",
-  mientras que el "setUsers" representa el cambio de estado, en este caso, el estado inicial no contiene
-  nada, ya que al momento de que se active "setUsers", este poseería la información de los usuarios. Por
-  lo mismo no puede ser "null", ya que generaría errores. */
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [updatingUser, setUpdatingUser] = useState(null);
 
-  useEffect(() => { /* El controlador de eventos de React. */
-    fetchUsers(); /* Llamado a la función fetchUsers. */
+  useEffect(() => {
+    fetchUsers();
   }, []);
 
-const cambiarRolUser = async (userId) => {
-  try {
-    const response = await fetch(`/api/users/${userId}`, {
-      method: 'PATCH', 
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ rol: "user" })
-    });
+  const cambiarRolUser = async (userId) => {
+    try {
+      setUpdatingUser(userId);
+      const response = await fetch(`/api/users/${userId}`, {
+        method: 'PATCH', 
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ rol: "user" })
+      });
 
-    if (!response.ok) {
-      throw new Error('Error al actualizar rol');
+      if (!response.ok) {
+        throw new Error('Error al actualizar rol');
+      }
+      setUsers(users.map(user => 
+        user._id === userId 
+          ? { ...user, rol: "user" }
+          : user
+      ));
+
+    } catch (error) {
+      console.error('Error:', error);
+      setError('Error al cambiar rol');
+    } finally {
+      setUpdatingUser(null);
     }
-    setUsers(users.map(user => 
-      user._id === userId 
-        ? { ...user, rol: "user" }
-        : user
-    ));
+  };
 
-  } catch (error) {
-    console.error('Error:', error);
-    setError('Error al cambiar rol');
-  }
-};
+  const cambiarRolAdmin = async (userId) => {
+    try {
+      setUpdatingUser(userId);
+      const response = await fetch(`/api/users/${userId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ rol: "admin" })
+      });
 
-const cambiarRolAdmin = async (userId) => {
-  try {
-    const response = await fetch(`/api/users/${userId}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ rol: "admin" })
-    });
+      if (!response.ok) {
+        throw new Error('Error al actualizar rol');
+      }
 
-    if (!response.ok) {
-      throw new Error('Error al actualizar rol');
+      setUsers(users.map(user => 
+        user._id === userId 
+          ? { ...user, rol: "admin" }
+          : user
+      ));
+
+    } catch (error) {
+      console.error('Error:', error);
+      setError('Error al cambiar rol');
+    } finally {
+      setUpdatingUser(null);
     }
-
-    setUsers(users.map(user => 
-      user._id === userId 
-        ? { ...user, rol: "admin" }
-        : user
-    ));
-
-  } catch (error) {
-    console.error('Error:', error);
-    setError('Error al cambiar rol');
-  }
-};
+  };
 
   const fetchUsers = async () => {
     try {
       setLoading(true);
+      setError(null);
       const response = await fetch('/api/users');
       
       if (!response.ok) {
@@ -83,27 +88,37 @@ const cambiarRolAdmin = async (userId) => {
     }
   };
 
+  // Estado de carga
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
-        <div className="flex flex-col items-center space-y-4">
-          <p className="text-gray-600">Cargando usuarios...</p>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center p-4">
+        <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl p-12 text-center border border-white/20">
+          <div className="flex items-center justify-center mb-6">
+            <div className="animate-spin rounded-full h-12 w-12 border-4 border-slate-300 border-t-blue-500"></div>
+          </div>
+          <h2 className="text-2xl font-bold text-slate-800 mb-2">Cargando usuarios...</h2>
+          <p className="text-slate-600">Por favor espera un momento</p>
         </div>
       </div>
     );
   }
 
+  // Estado de error
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md">
-          <h2 className="text-red-800 text-lg font-semibold mb-2">Error</h2>
-          <p className="text-red-600">{error}</p>
+      <div className="min-h-screen bg-gradient-to-br from-red-50 via-red-100 to-pink-100 flex items-center justify-center p-4">
+        <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl p-12 text-center border border-red-200 max-w-md">
+          <div className="text-6xl mb-6">⚠️</div>
+          <h2 className="text-2xl font-bold text-red-800 mb-4">Error</h2>
+          <p className="text-red-600 mb-6">{error}</p>
           <button 
             onClick={fetchUsers}
-            className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
+            className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 
+                     text-white font-semibold py-3 px-8 rounded-xl transition-all duration-300 
+                     transform hover:-translate-y-1 hover:shadow-lg active:translate-y-0
+                     focus:outline-none focus:ring-4 focus:ring-red-300/50"
           >
-            Reintentar
+            🔄 Reintentar
           </button>
         </div>
       </div>
@@ -111,81 +126,168 @@ const cambiarRolAdmin = async (userId) => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 flex items-center">
-            Lista de Usuarios
-          </h1>
-          <p className="text-gray-600 mt-2">
-            Total de usuarios: <span className="font-semibold">{users.length}</span>
-          </p>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {users.map((user) => (
-            <div 
-              key={user._id} 
-              className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-6"
-            >
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                </div>
-                <div className="ml-4">
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    {user.name || user.rol || 'Sin nombre'}
-                  </h3>
-                  <p className="text-sm text-gray-500">
-                    ID: {user._id}
-                  </p>
-                </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+      
+      {/* Header Section */}
+      <div className="bg-white/80 backdrop-blur-sm border-b border-white/20 sticky top-0 z-10">
+        <div className="max-w-7xl mx-auto px-6 py-8">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-4 mb-2">
+                <span className="text-4xl">👥</span>
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+                  Lista de Usuarios
+                </h1>
               </div>
-
-              <div className="space-y-3">
-                {user.email && (
-                  <div className="flex items-center text-gray-600">
-                    <span className="text-sm"> Email: {user.email}</span>
-                  </div>
-                )}
-
-                {user.rol && (
-                  <div className="inline-block">
-                    <span className={`px-2 py-1 text-xs rounded-full ${
-                      user.rol === 'admin' 
-                        ? 'bg-red-100 text-red-800' 
-                        : user.rol === 'moderador'
-                        ? 'bg-yellow-100 text-yellow-800'
-                        : 'bg-green-100 text-green-800'
-                    }`}>
-                     Rol: {user.rol} 
-                    </span>
-                  </div>
-                )}
-                
-                {user.rol && (
-                  <button onClick={() => cambiarRolUser(user._id)}>
-                    Cambiar Rol a User
-                  </button>
-                )}
-
-                {user.rol && (
-                  <button onClick={() => cambiarRolAdmin(user._id)}>
-                    Cambiar Rol a Admin
-                  </button>
-                )}
-              </div>
+              <p className="text-slate-600 flex items-center gap-2">
+                <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
+                Total de usuarios: <span className="font-semibold text-blue-600">{users.length}</span>
+              </p>
             </div>
-          ))}
+            
+            {/* Botón de refresh */}
+            <button
+              onClick={fetchUsers}
+              className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 
+                       text-white font-medium py-3 px-6 rounded-xl transition-all duration-300 
+                       transform hover:-translate-y-1 hover:shadow-lg active:translate-y-0
+                       focus:outline-none focus:ring-4 focus:ring-blue-300/50
+                       flex items-center gap-2"
+            >
+              🔄 <span>Actualizar</span>
+            </button>
+          </div>
         </div>
+      </div>
 
-        {users.length === 0 && (
-          <div className="text-center py-12">
-            <h3 className="text-lg font-semibold text-gray-600 mb-2">
-              No se encontraron usuarios
-            </h3>
-            <p className="text-gray-500">
-              La base de datos no contiene usuarios en este momento.
-            </p>
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        
+        {/* Users Grid */}
+        {users.length > 0 ? (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {users.map((user) => (
+              <div 
+                key={user._id} 
+                className="group bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl 
+                         transition-all duration-300 p-6 border border-white/20 
+                         hover:-translate-y-2 hover:bg-white/95"
+              >
+                
+                {/* User Header */}
+                <div className="flex items-center mb-6">
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl font-bold text-white shadow-lg ${
+                    user.rol === 'admin' ? 'bg-gradient-to-br from-red-500 to-red-600' :
+                    user.rol === 'moderador' ? 'bg-gradient-to-br from-yellow-500 to-orange-500' :
+                    'bg-gradient-to-br from-green-500 to-emerald-500'
+                  }`}>
+                    {user.rol === 'admin' ? '👑' : user.rol === 'moderador' ? '🛡️' : '👤'}
+                  </div>
+                  <div className="ml-4 flex-1">
+                    <h3 className="text-lg font-bold text-slate-800 truncate">
+                      {user.name || 'Sin nombre'}
+                    </h3>
+                    <p className="text-xs text-slate-500 font-mono truncate">
+                      ID: {user._id.slice(-8)}...
+                    </p>
+                  </div>
+                </div>
+
+                {/* User Info */}
+                <div className="space-y-4 mb-6">
+                  {user.email && (
+                    <div className="flex items-center gap-2 text-slate-600 bg-slate-50 rounded-lg p-3">
+                      <span className="text-lg">📧</span>
+                      <span className="text-sm font-medium truncate">{user.email}</span>
+                    </div>
+                  )}
+
+                  {user.rol && (
+                    <div className="flex items-center justify-center">
+                      <span className={`px-4 py-2 text-sm font-semibold rounded-full uppercase tracking-wide border-2 ${
+                        user.rol === 'admin' 
+                          ? 'bg-gradient-to-r from-red-50 to-pink-50 text-red-700 border-red-200' 
+                          : user.rol === 'moderador'
+                          ? 'bg-gradient-to-r from-yellow-50 to-orange-50 text-orange-700 border-orange-200'
+                          : 'bg-gradient-to-r from-green-50 to-emerald-50 text-green-700 border-green-200'
+                      }`}>
+                        {user.rol}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                
+                {/* Action Buttons */}
+                <div className="space-y-3">
+                  {user.rol !== 'user' && (
+                    <button 
+                      onClick={() => cambiarRolUser(user._id)}
+                      disabled={updatingUser === user._id}
+                      className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 
+                               text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-300 
+                               transform hover:-translate-y-0.5 hover:shadow-md active:translate-y-0
+                               focus:outline-none focus:ring-4 focus:ring-green-300/50
+                               disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none
+                               flex items-center justify-center gap-2"
+                    >
+                      {updatingUser === user._id ? (
+                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                      ) : (
+                        <>
+                          <span>👤</span>
+                          <span>Cambiar a User</span>
+                        </>
+                      )}
+                    </button>
+                  )}
+
+                  {user.rol !== 'admin' && (
+                    <button 
+                      onClick={() => cambiarRolAdmin(user._id)}
+                      disabled={updatingUser === user._id}
+                      className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 
+                               text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-300 
+                               transform hover:-translate-y-0.5 hover:shadow-md active:translate-y-0
+                               focus:outline-none focus:ring-4 focus:ring-red-300/50
+                               disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none
+                               flex items-center justify-center gap-2"
+                    >
+                      {updatingUser === user._id ? (
+                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                      ) : (
+                        <>
+                          <span>👑</span>
+                          <span>Cambiar a Admin</span>
+                        </>
+                      )}
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          
+          /* Empty State */
+          <div className="text-center py-20">
+            <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-xl p-12 max-w-md mx-auto border border-white/20">
+              <div className="text-8xl mb-6 opacity-50">👥</div>
+              <h3 className="text-2xl font-bold text-slate-700 mb-4">
+                No se encontraron usuarios
+              </h3>
+              <p className="text-slate-500 mb-6">
+                La base de datos no contiene usuarios en este momento.
+              </p>
+              <button
+                onClick={fetchUsers}
+                className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 
+                         text-white font-semibold py-3 px-8 rounded-xl transition-all duration-300 
+                         transform hover:-translate-y-1 hover:shadow-lg active:translate-y-0
+                         focus:outline-none focus:ring-4 focus:ring-blue-300/50"
+              >
+                🔄 Verificar nuevamente
+              </button>
+            </div>
           </div>
         )}
       </div>
