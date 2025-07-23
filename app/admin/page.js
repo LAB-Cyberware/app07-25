@@ -47,7 +47,7 @@ export default function AdminPage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-4">
       <div className="max-w-4xl mx-auto mt-8">
         {/* Contenedor principal con efecto glassmorphism */}
-        <div className="relative bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 p-8 overflow-hidden animate-fade-in-up">
+        <div className="relative bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 p-8 overflow-hidden">
           
           {/* Línea superior decorativa */}
           <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-60"></div>
@@ -91,15 +91,10 @@ export default function AdminPage() {
             {/* Botón de usuarios */}
             <Link 
               href="/admin/users" 
-              className="group relative flex-1 min-w-40 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 
-                         text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 
-                         transform hover:-translate-y-1 hover:shadow-xl active:translate-y-0
-                         focus:outline-none focus:ring-4 focus:ring-blue-300/50
-                         overflow-hidden"
+              className="group relative flex-1 min-w-40 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl active:translate-y-0 focus:outline-none focus:ring-4 focus:ring-blue-300/50 overflow-hidden"
             >
               {/* Efecto shine */}
-              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent 
-                             transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></span>
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
               
               <span className="relative flex items-center justify-center gap-2">
                 <span className="text-xl">👥</span>
@@ -110,15 +105,10 @@ export default function AdminPage() {
             {/* Botón de cerrar sesión */}
             <button 
               onClick={() => signOut()}
-              className="group relative flex-1 min-w-40 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 
-                         text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 
-                         transform hover:-translate-y-1 hover:shadow-xl active:translate-y-0
-                         focus:outline-none focus:ring-4 focus:ring-red-300/50
-                         overflow-hidden"
+              className="group relative flex-1 min-w-40 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl active:translate-y-0 focus:outline-none focus:ring-4 focus:ring-red-300/50 overflow-hidden"
             >
               {/* Efecto shine */}
-              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent 
-                             transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></span>
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
               
               <span className="relative flex items-center justify-center gap-2">
                 <span className="text-xl">🚪</span>
@@ -128,24 +118,6 @@ export default function AdminPage() {
           </div>
         </div>
       </div>
-      
-      {/* Styles para animaciones personalizadas */}
-      <style jsx>{`
-        @keyframes fade-in-up {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        
-        .animate-fade-in-up {
-          animation: fade-in-up 0.6s ease-out;
-        }
-      `}</style>
     </div>
   )
 }
