@@ -3,7 +3,7 @@
 import { useSession, signIn, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
-import '.css/page.css' 
+import './css/page.css' 
 
 export default function Login() {
   const { data: session, status } = useSession()
