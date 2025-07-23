@@ -19,7 +19,6 @@
   --admin-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Reset básico */
 * {
   margin: 0;
   padding: 0;
@@ -33,10 +32,9 @@ body {
   line-height: 1.6;
 }
 
-/* Container principal de la página admin */
 .admin-container {
   padding: 2rem;
-  max-width: 56rem; /* equivale a max-w-4xl */
+  max-width: 56rem; 
   margin: 2rem auto;
   background: linear-gradient(135deg, var(--admin-surface) 0%, #f9fafb 100%);
   border-radius: var(--admin-radius);
@@ -46,7 +44,6 @@ body {
   overflow: hidden;
 }
 
-/* Efecto de brillo sutil en el fondo */
 .admin-container::before {
   content: '';
   position: absolute;
@@ -58,9 +55,8 @@ body {
   opacity: 0.6;
 }
 
-/* Título principal */
 .admin-title {
-  font-size: 2.25rem; /* text-3xl */
+  font-size: 2.25rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
   color: var(--admin-primary);
@@ -76,7 +72,6 @@ body {
   opacity: 0.8;
 }
 
-/* Mensaje de bienvenida */
 .admin-welcome {
   font-size: 1.125rem;
   margin-bottom: 1.5rem;
@@ -89,7 +84,6 @@ body {
   font-weight: 600;
 }
 
-/* Card de información del usuario */
 .admin-info-card {
   background: linear-gradient(135deg, #fef2f2 0%, #fdf2f8 100%);
   padding: 1.5rem;
@@ -126,7 +120,6 @@ body {
   font-weight: bold;
 }
 
-/* Contenedor de botones */
 .admin-buttons {
   display: flex;
   gap: 1rem;
@@ -134,7 +127,6 @@ body {
   margin-top: 2rem;
 }
 
-/* Estilos base para botones */
 .admin-btn {
   padding: 0.875rem 1.75rem;
   font-weight: 600;
@@ -168,7 +160,6 @@ body {
   left: 100%;
 }
 
-/* Botón primario (Listado de Usuarios) */
 .admin-btn-primary {
   background: linear-gradient(135deg, var(--admin-accent) 0%, #2563eb 100%);
   color: white;
@@ -185,7 +176,6 @@ body {
   transform: translateY(0);
 }
 
-/* Botón de peligro (Cerrar sesión) */
 .admin-btn-danger {
   background: linear-gradient(135deg, var(--admin-danger) 0%, #b91c1c 100%);
   color: white;
@@ -202,7 +192,6 @@ body {
   transform: translateY(0);
 }
 
-/* Estados de carga */
 .loading-text {
   display: flex;
   align-items: center;
@@ -227,7 +216,6 @@ body {
   100% { transform: rotate(360deg); }
 }
 
-/* Mensaje de acceso denegado */
 .access-denied {
   text-align: center;
   padding: 3rem;
@@ -239,7 +227,6 @@ body {
   border: 2px solid #fecaca;
 }
 
-/* Iconos para botones */
 .admin-btn-primary::after {
   content: '👥';
   margin-left: 0.25rem;
@@ -250,7 +237,6 @@ body {
   margin-left: 0.25rem;
 }
 
-/* Responsive design */
 @media (max-width: 768px) {
   .admin-container {
     margin: 1rem;
@@ -276,7 +262,6 @@ body {
   }
 }
 
-/* Animaciones de entrada */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -292,14 +277,12 @@ body {
   animation: fadeInUp 0.6s ease-out;
 }
 
-/* Efectos hover adicionales */
 .admin-info-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px -5px rgba(220, 38, 38, 0.25);
   transition: var(--admin-transition);
 }
 
-/* Dark mode support (opcional) */
 @media (prefers-color-scheme: dark) {
   :root {
     --admin-bg: #0f172a;
